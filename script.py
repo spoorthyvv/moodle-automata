@@ -29,8 +29,8 @@ for file in files:
         descriptions.append(file)
 
 
-questions.sort()
-descriptions.sort()
+questions.sort(key=lambda x: int(x.strip('Q').strip('.png')) )
+descriptions.sort(key=lambda x: int(x.strip('A').strip('.png')))
 
 
 
