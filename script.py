@@ -46,7 +46,7 @@ with  open( os.path.join(dir, 'answers.txt')) as answers_processor:
     format  = answers_processor.readline()
     for line in answers_processor.readlines():
         question, answer = line.strip().split(',')
-        answers[question] = int(answer)
+        answers[question] = int(answer) - 1
 
 # print(answers)
 
