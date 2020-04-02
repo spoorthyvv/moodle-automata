@@ -60,7 +60,7 @@ print(descriptions)
 answers = {}
 
 with  open( os.path.join(dir, 'answers.txt')) as answers_processor:
-    paper_format  = answers_processor.readline()
+    paper_format  = answers_processor.readline().strip()
     for line in answers_processor.readlines():
         question, answer = line.strip().split('=')
         answers[question] = int(answer) - 1
