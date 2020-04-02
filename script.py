@@ -8,15 +8,32 @@
 
 
 import base64
-import cv2
+#import cv2
 import sys
 import os
+import time
 
 
 
+print(
+"""
+    _    _                      __  __                 _ _      
+   / \  | |_   ____ _ ___      |  \/  | ___   ___   __| | | ___ 
+  / _ \ | \ \ / / _` / __|_____| |\/| |/ _ \ / _ \ / _` | |/ _ \\
+ / ___ \| |\ V / (_| \__ \_____| |  | | (_) | (_) | (_| | |  __/
+/_/   \_\_| \_/ \__,_|___/     |_|  |_|\___/ \___/ \__,_|_|\___|
+                                                                
+                                                               
+""")
 
 
-dir = sys.argv[1]
+dir = input('Enter the folder/directory >>> ')
+
+print()
+print()
+
+output_file = input('Output File  >>> ')
+
 
 files = os.listdir(dir)
 
@@ -43,13 +60,34 @@ print(descriptions)
 answers = {}
 
 with  open( os.path.join(dir, 'answers.txt')) as answers_processor:
-    format  = answers_processor.readline()
+    paper_format  = answers_processor.readline()
     for line in answers_processor.readlines():
         question, answer = line.strip().split('=')
         answers[question] = int(answer) - 1
 
 # print(answers)
 
+
+def jpeg_res(filename):
+
+    with open(filename,'rb') as img_file:
+
+       # height of image (in 2 bytes) is at 164th position
+       img_file.seek(163)
+
+       # read the 2 bytes
+       a = img_file.read(2)
+
+       # calculate height
+       height = (a[0] << 8) + a[1]
+
+       # next 2 bytes is width
+       a = img_file.read(2)
+
+       # calculate width
+       width = (a[0] << 8) + a[1]
+
+    return width, height
 
 
 
@@ -66,17 +104,20 @@ template = '''
 '''
 
 
-with open(sys.argv[2], 'w') as out_file:
+with open(output_file, 'w') as out_file:
     for question, description in zip(questions, descriptions):
 
         num = question.strip('Q').strip('.png')
         
         question, description = os.path.join(dir, question), os.path.join(dir, description) 
-        height1, width1, _ = cv2.imread(question).shape
-        height2, width2, _ = cv2.imread(description).shape
+        height1, width1 = jpeg_res(question)
+        height2, width2 = jpeg_res(description)
 
-
-        initial = ['~' for  _  in range(4) ]
+        if paper_format == 'cet': 
+             initial = ['~' for  _  in range(4) ]
+        elif paper_format in {'neet', 'jee'} :
+             initial = ['~%-25%' for  _  in range(4) ]        
+               
         initial[ answers[num] ] = '='
         one, two, three, four = initial
 
@@ -90,3 +131,6 @@ with open(sys.argv[2], 'w') as out_file:
 
 
 
+print('Process completed ........')
+time.sleep(1)
+sys.exit(0)
