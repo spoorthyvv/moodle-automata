@@ -13,8 +13,6 @@ import sys
 import os
 import time
 
-
-
 print(
 """
     _    _                      __  __                 _ _      
@@ -27,12 +25,12 @@ print(
 """)
 
 
-dir = input('Enter the folder/directory >>> ')
+dir = sys.argv[1]
 
 print()
 print()
 
-output_file = input('Output File  >>> ')
+output_file = sys.argv[2]
 
 
 files = os.listdir(dir)
@@ -60,7 +58,7 @@ print(descriptions)
 answers = {}
 
 with  open( os.path.join(dir, 'answers.txt')) as answers_processor:
-    paper_format  = answers_processor.readline().strip()
+    format  = answers_processor.readline()
     for line in answers_processor.readlines():
         question, answer = line.strip().split('=')
         answers[question] = int(answer) - 1
@@ -113,11 +111,8 @@ with open(output_file, 'w') as out_file:
         height1, width1 = jpeg_res(question)
         height2, width2 = jpeg_res(description)
 
-        if paper_format == 'cet': 
-             initial = ['~' for  _  in range(4) ]
-        elif paper_format in {'neet', 'jee'} :
-             initial = ['~%-25%' for  _  in range(4) ]        
-               
+
+        initial = ['~' for  _  in range(4) ]
         initial[ answers[num] ] = '='
         one, two, three, four = initial
 
